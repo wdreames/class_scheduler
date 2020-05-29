@@ -5,14 +5,13 @@ import time
 import pause
 
 # Enter your preferred classes here:
-classes = ['10', '9223']
-# Also make sure to change the registration time!!! (line 38)
+classes = ['8116']
+# Also make sure to change the registration time!!! (line 40)
 
 # Makes a connection to the internet through a Chrome driver
 driver = webdriver.Chrome(os.path.join(os.getcwd(), 'data', 'chromedriver'))
-driver.get('https://banweb.cnu.edu:9997/bpdbdad/twbkwbis.P_WWWLogin')
+driver.get('https://banweb.cnu.edu/banweb/twbkwbis.P_WWWLogin')
 
-# Pulls out the prerequisites from the website
 try:
     id = ''
     password = ''
@@ -30,13 +29,15 @@ try:
     driver.find_element_by_link_text('Add/Drop Classes').click()
 
     # Chooses Semester
-    driver.find_element_by_xpath("//select[@name='term_in']/option[text()='Spring Semester 2020']").click()
+    driver.find_element_by_xpath("//select[@name='term_in']/option[text()='Fall Semester 2020']").click()
     driver.find_element_by_name('term_in').submit()
 
     # Waits until the exact opening time to enter the pin
-    # print(datetime.now())
-    # pause.until(datetime(2019, 11, 6, 23, 15, 0, 0))
-    # print(datetime.now())
+    # Best to enter the exact moment that classes open rather than half a second early
+    # Year, Month, Day, Hour (military-time), Minute, Second, Millisecond
+    print(datetime.now())
+    pause.until(datetime(2020, 5, 29, 8, 0, 0, 0))
+    print(datetime.now())
 
     # Enters the Alternate PIN
     driver.find_element_by_name('pin').send_keys(keycode)
@@ -48,10 +49,9 @@ try:
             driver.find_element_by_id('crn_id' + str(i + 1)).send_keys(classes[i] + '\n')
         else:
             driver.find_element_by_id('crn_id' + str(i + 1)).send_keys(classes[i])
-
-    # Keeps the tab open for another two minutes
-    time.sleep(120)
 except Exception as e:
     print(e)
 finally:
-    driver.quit()  # Closes and quits the Chrome browser
+    # Keeps the tab open for another five minutes
+    time.sleep(300)
+    driver.quit()
