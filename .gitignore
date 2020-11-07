@@ -1,21 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/pycharm,macos,windows,linux
-# Edit at https://www.toptal.com/developers/gitignore?templates=pycharm,macos,windows,linux
-
-### Linux ###
-*~
-
-# temporary files which can be created if a process still has a handle open of a deleted file
-.fuse_hidden*
-
-# KDE directory preferences
-.directory
-
-# Linux trash folder which might appear on any partition or disk
-.Trash-*
-
-# .nfs files are created when an open file is removed but is still being accessed
-.nfs*
+# Created by https://www.toptal.com/developers/gitignore/api/venv,pycharm,macos,windows
+# Edit at https://www.toptal.com/developers/gitignore?templates=venv,pycharm,macos,windows
 
 ### macOS ###
 # General
@@ -149,6 +134,20 @@ fabric.properties
 # https://plugins.jetbrains.com/plugin/12206-codestream
 .idea/codestream.xml
 
+### venv ###
+# Virtualenv
+# http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
+.Python
+[Bb]in
+[Ii]nclude
+[Ll]ib
+[Ll]ib64
+[Ll]ocal
+[Ss]cripts
+pyvenv.cfg
+.venv
+pip-selfcheck.json
+
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
@@ -175,4 +174,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/pycharm,macos,windows,linux
+# End of https://www.toptal.com/developers/gitignore/api/venv,pycharm,macos,windows
