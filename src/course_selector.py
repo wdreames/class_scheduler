@@ -11,15 +11,21 @@ from getpass import getpass
 
 # Gathers user input
 # Needs to be run on terminal for this to work!
-id = input('Enter your student id: ')
+student_id = input('Enter your student id: ')
 password = getpass()
 
 # Reads in input data from file
-with open(os.path.join('data', 'data.txt'), 'rt') as file:
-    keycode = file.readline().split(':')[1].strip()
-    classes = [x.strip() for x in file.readline().split(':')[1].split(',')]
-    semester = file.readline().split(':')[1].strip()
+with open(os.path.join('..', 'data', 'registration_info.txt'), 'rt') as file:
+    # The .split(':', 1)[1] is used to get rid of the text explaining how each line should be used
+    keycode = file.readline().split(':', 1)[1].strip()
+    classes = [x.strip() for x in file.readline().split(':', 1)[1].split(',')]
+    semester = file.readline().split(':', 1)[1].strip()
+    date_str = file.readline().split(':', 2)[2].strip()
 
+registration_date = datetime.strptime(date_str, '%Y-%m-%d %H:%M')
+print(registration_date)
+
+exit()
 print('Connecting to CNU...')
 
 # Makes a connection to the internet through a Chrome driver
@@ -28,9 +34,10 @@ driver.get('https://banweb.cnu.edu/banweb/twbkwbis.P_WWWLogin')
 
 try:
     # Logs into CNU Live and navigates to class registration
-    driver.find_element_by_id('UserID').send_keys(id)
+    driver.find_element_by_id('UserID').send_keys(student_id)
     driver.find_element_by_name('PIN').send_keys(password + '\n')  # '\n' used in place of 'enter'
-    time.sleep(0.1)  # Pauses so that way it has time to load the next page
+    # Pauses so that way it has time to load the next page
+    time.sleep(0.1)
     driver.find_element_by_name('StuWeb-MainMenuLink').click()
     driver.find_element_by_link_text('Registration').click()
     driver.find_element_by_link_text('Add/Drop Classes').click()
@@ -46,7 +53,7 @@ try:
     # Best to enter the exact moment that classes open rather than half a second early
     # Year, Month, Day, Hour (military-time), Minute, Second, Millisecond
     print(datetime.now())
-    pause.until(datetime(2020, 11, 9, 11, 27, 30, 0))
+    pause.until(registration_date)
     print(datetime.now())
 
     # Begins registration
