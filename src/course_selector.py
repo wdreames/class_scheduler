@@ -15,7 +15,7 @@ student_id = input('Enter your student id: ')
 password = getpass()
 
 # Reads in input data from file
-with open(os.path.join('..', 'data', 'registration_info.txt'), 'rt') as file:
+with open(os.path.join('data', 'registration_info.txt'), 'rt') as file:
     # The .split(':', 1)[1] is used to get rid of the text explaining how each line should be used
     keycode = file.readline().split(':', 1)[1].strip()
     classes = [x.strip() for x in file.readline().split(':', 1)[1].split(',')]
@@ -23,9 +23,7 @@ with open(os.path.join('..', 'data', 'registration_info.txt'), 'rt') as file:
     date_str = file.readline().split(':', 2)[2].strip()
 
 registration_date = datetime.strptime(date_str, '%Y-%m-%d %H:%M')
-print(registration_date)
 
-exit()
 print('Connecting to CNU...')
 
 # Makes a connection to the internet through a Chrome driver
