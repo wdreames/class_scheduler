@@ -1,4 +1,4 @@
-Registration key: 830378
-CRN Numbers: 8367, 8374, 8880, 8368, 8657, 8373, 8661
-Semester for Registration: Spring Semester 2021
-Registration date and time (YYYY-MM-DD HH:MM): 2020-11-11 07:00
+Registration key: 759979
+CRN Numbers: 8312, 8321, 8117, 8120, 8071, 8481, 9154
+Semester for Registration: Fall Semester 2021
+Registration date and time (YYYY-MM-DD HH:MM): 2021-04-11 16:26

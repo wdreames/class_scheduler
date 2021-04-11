@@ -1,4 +1,3 @@
-
 import os
 import pause
 import time
@@ -50,9 +49,9 @@ try:
     # Waits until the exact opening time to enter the pin
     # Best to enter the exact moment that classes open rather than half a second early
     # Year, Month, Day, Hour (military-time), Minute, Second, Millisecond
-    print(datetime.now())
+    print('Current time:  {}'.format(datetime.now()))
+    print('Waiting until: {}'.format(registration_date))
     pause.until(registration_date)
-    print(datetime.now())
 
     # Begins registration
     driver.find_element_by_name('pin').submit()
