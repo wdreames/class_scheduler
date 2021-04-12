@@ -52,6 +52,9 @@ try:
     print('Current time:  {}'.format(datetime.now()))
     print('Waiting until: {}'.format(registration_date))
     pause.until(registration_date)
+    # TODO: Important: If the time you log in when testing is earlier than it should be,
+    # TODO: add a slight delay to the program so it can register at the correct time
+    # TODO: (don't want to be half a second early)
 
     # Begins registration
     driver.find_element_by_name('pin').submit()
