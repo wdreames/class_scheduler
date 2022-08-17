@@ -10,8 +10,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
-# Note that the registrar won't let you register for >18 credits and if you try to the program will mess up
-
 # Gathers user input
 student_id = input('Enter your student id: ')
 password = getpass()
