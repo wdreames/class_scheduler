@@ -1,4 +1,4 @@
-Registration key: 759979
-CRN Numbers: 8312, 8321, 8117, 8120, 8071, 8481, 9154
-Semester for Registration: Fall Semester 2021
-Registration date and time (YYYY-MM-DD HH:MM): 2021-04-12 07:30
+Registration key: 764504
+CRN Numbers: 8223, 8282, 8164, 8109, 8123
+Semester for Registration: Fall Semester 2022
+Registration date and time (YYYY-MM-DD HH:MM): 2022-03-24 07:00
