@@ -2,14 +2,17 @@ import os
 import pause
 import time
 import datetime
-from selenium import webdriver
 from getpass import getpass
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 
 # Note that the registrar won't let you register for >18 credits and if you try to the program will mess up
-# Also make sure to change the registration time!!! (line 40)
 
 # Gathers user input
-# Needs to be run on terminal for this to work!
 student_id = input('Enter your student id: ')
 password = getpass()
 
@@ -23,35 +26,40 @@ with open(os.path.join('data', 'registration_info.txt'), 'rt') as file:
 
 registration_date = datetime.datetime.strptime(date_str, '%Y-%m-%d %H:%M')
 
-print('Testing Username and Password...')
+print('Testing Username, Password, and Registration Key...')
 
-# Run driver without waiting
-# Wait until close to login
-# Run and wait until correct time
-
-driverConfirmation = webdriver.Chrome(os.path.join(os.getcwd(), 'data', 'chromedriver'))
-driverConfirmation.get('https://banweb.cnu.edu/banweb/twbkwbis.P_WWWLogin')
 # Logs into CNU Live and navigates to class registration
-driverConfirmation.find_element_by_id('UserID').send_keys(student_id)
-driverConfirmation.find_element_by_name('PIN').send_keys(password + '\n')  # '\n' used in place of 'enter'
+driverTest = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+driverTest.get('https://banweb.cnu.edu/banweb/twbkwbis.P_WWWLogin')
 
-# Pauses so that way it has time to load the next page
-time.sleep(0.1)
-driverConfirmation.find_element_by_name('StuWeb-MainMenuLink').click()
-driverConfirmation.find_element_by_link_text('Registration').click()
-driverConfirmation.find_element_by_link_text('Add/Drop Classes').click()
+try:
+    driverTest.find_element(By.ID, 'UserID').send_keys(student_id)
+    driverTest.find_element(By.NAME, 'PIN').send_keys(password + '\n')  # '\n' used in place of 'enter'
 
-# Chooses Semester
-driverConfirmation.find_element_by_xpath("//select[@name='term_in']/option[text()='{}']".format(semester)).click()
-driverConfirmation.find_element_by_name('term_in').submit()
+    # Waits for the page to load
+    element = WebDriverWait(driverTest, 20).until(
+        EC.presence_of_element_located((By.NAME, 'StuWeb-MainMenuLink'))
+    )
+    driverTest.find_element(By.NAME, 'StuWeb-MainMenuLink').click()
+    driverTest.find_element(By.LINK_TEXT, 'Registration').click()
+    driverTest.find_element(By.LINK_TEXT, 'Add/Drop Classes').click()
 
-# Enters the pin
-driverConfirmation.find_element_by_name('pin').send_keys(keycode)
+    # Chooses Semester
+    driverTest.find_element(By.XPATH, "//select[@name='term_in']/option[text()='{}']".format(semester)).click()
+    driverTest.find_element(By.NAME, 'term_in').submit()
 
-# Begins registration
-driverConfirmation.find_element_by_name('pin').submit()
-pause.sleep(5)
-driverConfirmation.quit()
+    # Enters the pin
+    driverTest.find_element(By.NAME, 'pin').send_keys(keycode)
+    driverTest.find_element(By.NAME, 'pin').submit()
+
+    # If no errors have occurred up to this point, the test was successful
+    print('Credentials are valid.')
+    pause.sleep(5)
+    driverTest.quit()
+except Exception as e:
+    print('Error: Invalid credentials')
+    print(e)
+    exit(1)
 
 window_start_time = registration_date - datetime.timedelta(minutes=5)
 print('Waiting until {} to start...'.format(window_start_time))
@@ -60,49 +68,49 @@ pause.until(window_start_time)
 print('Connecting to CNU...')
 
 # Makes a connection to the internet through a Chrome driver
-driver = webdriver.Chrome(os.path.join(os.getcwd(), 'data', 'chromedriver'))
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.get('https://banweb.cnu.edu/banweb/twbkwbis.P_WWWLogin')
 
 try:
     # Logs into CNU Live and navigates to class registration
-    driver.find_element_by_id('UserID').send_keys(student_id)
-    driver.find_element_by_name('PIN').send_keys(password + '\n')  # '\n' used in place of 'enter'
+    driver.find_element(By.ID, 'UserID').send_keys(student_id)
+    driver.find_element(By.NAME, 'PIN').send_keys(password + '\n')  # '\n' used in place of 'enter'
     # Pauses so that way it has time to load the next page
     time.sleep(0.1)
-    driver.find_element_by_name('StuWeb-MainMenuLink').click()
-    driver.find_element_by_link_text('Registration').click()
-    driver.find_element_by_link_text('Add/Drop Classes').click()
+    driver.find_element(By.NAME, 'StuWeb-MainMenuLink').click()
+    driver.find_element(By.LINK_TEXT, 'Registration').click()
+    driver.find_element(By.LINK_TEXT, 'Add/Drop Classes').click()
 
     # Chooses Semester
-    driver.find_element_by_xpath("//select[@name='term_in']/option[text()='{}']".format(semester)).click()
-    driver.find_element_by_name('term_in').submit()
+    driver.find_element(By.XPATH, "//select[@name='term_in']/option[text()='{}']".format(semester)).click()
+    driver.find_element(By.NAME, 'term_in').submit()
 
     # Enters the pin
-    driver.find_element_by_name('pin').send_keys(keycode)
+    driver.find_element(By.NAME, 'pin').send_keys(keycode)
 
     # Waits until the exact opening time to enter the pin
-    # Best to enter the exact moment that classes open rather than half a second early
-    # Year, Month, Day, Hour (military-time), Minute, Second, Millisecond
-    altered_reg_date = registration_date + datetime.timedelta(milliseconds=2500)
+    altered_reg_date = registration_date + datetime.timedelta(milliseconds=1500)
     print('Current time:  {}'.format(datetime.datetime.now()))
     print('Waiting until: {}'.format(altered_reg_date))
     pause.until(altered_reg_date)
-    # TODO: Important: If the time you log in when testing is earlier than it should be,
-    # TODO: add a slight delay to the program so it can register at the correct time
-    # TODO: (don't want to be half a second early)
 
     # Begins registration
-    driver.find_element_by_name('pin').submit()
+    driver.find_element(By.NAME, 'pin').submit()
 
-    # Enters all of the classes and submits
+    # Enter all courses and submit for registration
     for i in range(len(classes)):
         if i == len(classes) - 1:
-            driver.find_element_by_id('crn_id' + str(i + 1)).send_keys(classes[i] + '\n')
+            driver.find_element(By.ID, 'crn_id' + str(i + 1)).send_keys(classes[i] + '\n')
         else:
-            driver.find_element_by_id('crn_id' + str(i + 1)).send_keys(classes[i])
+            driver.find_element(By.ID, 'crn_id' + str(i + 1)).send_keys(classes[i])
+
+    print('Completed course registration at {}.'.format(datetime.datetime.now()))
 except Exception as e:
+    print('An error occurred during the course registration process:')
     print(e)
 finally:
     # Keeps the tab open for another five minutes
+    print('The browser will remain open for an additional 5 minutes for manual use.')
+    print('Enter Ctrl+C to exit.')
     time.sleep(3000)
     driver.quit()
