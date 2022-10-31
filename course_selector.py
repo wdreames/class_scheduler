@@ -60,6 +60,8 @@ def main():
         print('Error: Invalid credentials')
         print(e)
         exit(1)
+        
+    del driverTest
 
     window_start_time = registration_date - datetime.timedelta(minutes=5)
     print('Waiting until {} to start...'.format(window_start_time))
@@ -76,7 +78,7 @@ def main():
         driver.find_element(By.NAME, 'PIN').send_keys(password + '\n')  # '\n' used in place of 'enter'
 
         # Waits for the page to load
-        WebDriverWait(driverTest, 20).until(
+        WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.NAME, 'StuWeb-MainMenuLink'))
         )
         driver.find_element(By.NAME, 'StuWeb-MainMenuLink').click()
